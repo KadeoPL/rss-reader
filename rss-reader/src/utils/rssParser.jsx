@@ -12,6 +12,8 @@ export default async function RSSParser(){
             description: item.querySelector("description").textContent,
             pubDate: item.querySelector("pubDate").textContent,
             category: Array.from(item.querySelectorAll("category")).map(category => category.textContent),
+            author: item.querySelector("creator").textContent,
+            image: item.querySelector("thumbnail").getAttribute("url"),
         }));
         
       return items;

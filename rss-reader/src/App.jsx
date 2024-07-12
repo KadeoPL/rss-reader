@@ -26,9 +26,9 @@ function App() {
   }
   
   return (
-    <>
+    <div className="flex flex-row flex-wrap gap-5 mx-5 ">
       {content}
-    </>
+    </div>
   )
 }
 
