@@ -1,10 +1,11 @@
 import PropTypes from 'prop-types';
 import { format } from 'date-fns';
+import { ArrowRight } from 'iconsax-react'
 
 export default function Article ({article}) {
     
     const pubDate = new Date(article.pubDate);
-    const formattedDate = format(pubDate, 'dd/MM/yyyy');
+    const formattedDate = format(pubDate, 'dd.MM.yyyy');
 
     const backgroundImage = {
         backgroundImage: `url(${article.image})`
@@ -15,16 +16,23 @@ export default function Article ({article}) {
                 <div style={backgroundImage} className='w-full h-[200px] bg-cover bg-center rounded-2xl'>
                 </div>
                 <div>
-                    <h1 >{article.title}</h1>
-                    <div>
-                    {article.category.map((category, index) => {
+                <div className='flex flex-row gap-2 mt-3 text-sm hover:cursor-pointer'>
+                    {/* {article.category.map((category, index) => {
                         return <p key={index}>{category}</p>
-                    })}
+                    })} */}
+                    {article.category}
                     </div>
-                    <p>{article.description}</p>
-                    <a href={article.link}>Read more</a>
-                    <p>{formattedDate}</p>
-                    <p>{article.author}</p>
+                    <h1 className='font-bold text-xl leading-7 my-2'>{article.title}</h1>
+                    <p className='mb-2'>{article.description}</p>
+                    <div className='flex flex-row gap-1'>
+                        <a href={article.link} className='block mb-2'>Read more</a>
+                        <ArrowRight />
+                    </div>
+                    <div className='flex flex-row justify-between gap-3 text-sm'>
+                        <p>{article.author}</p>  
+                        <p>{formattedDate}</p>  
+                    </div>
+                    
                 </div>
                 
         </div>

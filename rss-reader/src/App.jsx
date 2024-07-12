@@ -26,9 +26,12 @@ function App() {
   }
   
   return (
-    <div className="flex flex-row flex-wrap gap-5 mx-5 ">
-      {content}
+    <div className="w-full mx-auto">
+      <div className="flex flex-row flex-wrap gap-5 mx-5 justify-center">
+        {content}
+      </div>
     </div>
+
   )
 }
 
