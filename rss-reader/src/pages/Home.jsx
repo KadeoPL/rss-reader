@@ -7,6 +7,7 @@ import Navigation from "../components/Navigation";
 export default function Home(){
     const dispatch = useDispatch();
   const articles = useSelector((state) => state.articles.items);
+  const isArticleFavorite = useSelector((state) => state.article.isFavorite)
   const articlesStatus = useSelector((state) => state.articles.status);
   const error = useSelector ((state) => state.articles.error);
   
@@ -20,7 +21,7 @@ export default function Home(){
     content = <p>Loading...</p>;
   } else if (articlesStatus === 'succeeded') {
     content = articles.map((article, index) => (
-      <Article article={article} key={index} />
+      <Article article={article} key={index} isFavorite={isArticleFavorite}/>
     ));
   } else if (articlesStatus === 'failed') {
     content = <p>{error}</p>;

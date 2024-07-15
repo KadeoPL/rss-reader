@@ -1,16 +1,13 @@
-import { useState } from "react";
+
 import { Heart } from "iconsax-react";
 import { addFavorite, removeFavorite } from "../redux/slices/favoritesSlices";
 import { useDispatch } from "react-redux";
 import PropTypes from 'prop-types';
 
-export default function FavoriteButton ({article}){
-    const [isFavorite, setIsFavorite] = useState(false);
-
+export default function FavoriteButton ({article, isFavorite}){
     const dispatch = useDispatch();
 
     const handleClick = () => {
-        setIsFavorite(!isFavorite)
         if (isFavorite) {
             dispatch(removeFavorite(article))
         } else {
@@ -28,5 +25,6 @@ export default function FavoriteButton ({article}){
 }
 
 FavoriteButton.propTypes = {
-    article: PropTypes.object.isRequired
+    article: PropTypes.object.isRequired,
+    isFavorite: PropTypes.bool,
 }

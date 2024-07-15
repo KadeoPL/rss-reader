@@ -14,6 +14,7 @@ const articlesSlice = createSlice ({
     name: 'articles',
     initialState: {
         items: [],
+        isFavorite: false,
         status: 'idle',
         error: null,
     },
