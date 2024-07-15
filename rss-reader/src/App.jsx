@@ -1,37 +1,18 @@
-import { useEffect } from "react"
-import { useDispatch, useSelector } from "react-redux"
-import { fetchArticles } from "./redux/slices/articlesSlices"
-import Article from "./components/Article"
+import { Routes, Route} from "react-router-dom";
+import Home from "./pages/Home";
+import Favorites from "./pages/Favorites";
 
 function App() {
-  const dispatch = useDispatch();
-  const articles = useSelector((state) => state.articles.items);
-  const articlesStatus = useSelector((state) => state.articles.status);
-  const error = useSelector ((state) => state.articles.error);
-  
-  useEffect(() => {
-    dispatch(fetchArticles());
-  }, [dispatch])
 
-  let content;
-
-  if (articlesStatus === 'loading') {
-    content = <p>Loading...</p>;
-  } else if (articlesStatus === 'succeeded') {
-    content = articles.map((article, index) => (
-      <Article article={article} key={index} />
-    ));
-  } else if (articlesStatus === 'failed') {
-    content = <p>{error}</p>;
-  }
-  
   return (
-    <div className="w-full mx-auto">
-      <div className="flex flex-row flex-wrap gap-5 mx-5 justify-center">
-        {content}
-      </div>
-    </div>
-
+    <>
+    <Routes>
+        <Route path="/">
+          <Route index element={<Home />} />
+          <Route path="favorites" element={<Favorites />} />
+        </Route>
+      </Routes>
+    </>
   )
 }
 

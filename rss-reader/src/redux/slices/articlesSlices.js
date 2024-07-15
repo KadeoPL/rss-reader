@@ -1,5 +1,5 @@
 import {createSlice, createAsyncThunk} from '@reduxjs/toolkit';
-import RSSParser  from '../../utils/rssParser';
+import RSSParser from '../../utils/RSSParser'
 
 export const fetchArticles = createAsyncThunk(
     'articles/fetchArticles',
@@ -7,6 +7,7 @@ export const fetchArticles = createAsyncThunk(
         const articles = await RSSParser();
         return articles
     }
+
 )
 
 const articlesSlice = createSlice ({
@@ -14,7 +15,7 @@ const articlesSlice = createSlice ({
     initialState: {
         items: [],
         status: 'idle',
-        error: null
+        error: null,
     },
     reducers: {},
     extraReducers: (builder) => {
