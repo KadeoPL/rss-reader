@@ -13,10 +13,9 @@ export default async function RSSParser(){
             pubDate: item.querySelector("pubDate").textContent,
             // category: Array.from(item.querySelectorAll("category")).map(category => category.textContent),
             category: item.querySelector("category").textContent,
-            author: item.querySelector("creator").textContent,
+            author: item.querySelector("creator") ? item.querySelector("creator").textContent : "No",
             image: item.querySelector("thumbnail").getAttribute("url"),
         }));
-        
       return items;
     } catch (e) {
         console.error(e);

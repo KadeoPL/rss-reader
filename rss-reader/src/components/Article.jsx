@@ -1,9 +1,10 @@
 import PropTypes from 'prop-types';
 import { format } from 'date-fns';
-import { ArrowRight } from 'iconsax-react'
+import {NoteText } from 'iconsax-react';
+import FavoriteButton from './FavoriteButton';
 
 export default function Article ({article}) {
-    
+
     const pubDate = new Date(article.pubDate);
     const formattedDate = format(pubDate, 'dd.MM.yyyy');
 
@@ -26,13 +27,17 @@ export default function Article ({article}) {
                     <p className='mb-2'>{article.description}</p>
                     <div className='flex flex-row gap-1'>
                         <a href={article.link} className='block mb-2'>Read more</a>
-                        <ArrowRight />
                     </div>
                     <div className='flex flex-row justify-between gap-3 text-sm'>
                         <p>{article.author}</p>  
                         <p>{formattedDate}</p>  
                     </div>
-                    
+                    <div className='flex flex-row gap-4 mt-3 text-sm'>
+                        <FavoriteButton article={article}/>
+                        <div className='flex flex-row gap-1 items-center'>
+                            <NoteText size={16}/>
+                            <p>Add notes</p></div>
+                    </div>
                 </div>
                 
         </div>
@@ -42,11 +47,12 @@ export default function Article ({article}) {
 Article.propTypes = {
     article: PropTypes.shape({
         title: PropTypes.string.isRequired,
-        category: PropTypes.arrayOf(PropTypes.string).isRequired,
+        // category: PropTypes.arrayOf(PropTypes.string).isRequired,
+        category: PropTypes.string.isRequired,
         description: PropTypes.string.isRequired,
         link: PropTypes.string.isRequired,
         pubDate: PropTypes.string.isRequired,
-        author: PropTypes.string.isRequired,
+        author: PropTypes.string,
         image: PropTypes.string
     }).isRequired,
 };
