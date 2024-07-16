@@ -1,7 +1,8 @@
 import PropTypes from 'prop-types';
 import { format } from 'date-fns';
-import {NoteText } from 'iconsax-react';
+import { NoteText, Weight } from 'iconsax-react';
 import FavoriteButton from './FavoriteButton';
+import { motion } from 'framer-motion';
 
 export default function Article ({article}) {
 
@@ -13,33 +14,38 @@ export default function Article ({article}) {
     }
     
     return (
-        <div className='w-[300px] min-h-[300px] flex flex-col'>
-                <div style={backgroundImage} className='w-full h-[200px] bg-cover bg-center rounded-2xl'>
-                </div>
-                <div>
-                <div className='flex flex-row gap-2 mt-3 text-sm hover:cursor-pointer'>
-                    {/* {article.category.map((category, index) => {
-                        return <p key={index}>{category}</p>
-                    })} */}
-                    {article.category}
+        <div className='w-[300px] h-[500px] flex flex-col'>
+            <div style={backgroundImage} className='w-full h-[200px] bg-cover bg-center rounded-2xl'>
+            </div>
+            <div className='flex flex-col flex-1 p-3'>
+                <div className='flex flex-row justify-between gap-2 text-sm hover:cursor-pointer'>
+                    <div>
+                        {article.category}
                     </div>
-                    <h1 className='font-bold text-xl leading-7 my-2'>{article.title}</h1>
-                    <p className='mb-2'>{article.description}</p>
-                    <div className='flex flex-row gap-1'>
-                        <a href={article.link} className='block mb-2'>Read more</a>
-                    </div>
-                    <div className='flex flex-row justify-between gap-3 text-sm'>
-                        <p>{article.author}</p>  
-                        <p>{formattedDate}</p> 
-                    </div>
-                    <div className='flex flex-row gap-4 mt-3 text-sm'>
+                    <div className='flex flex-row gap-3 items-center'>
                         <FavoriteButton article={article}/>
                         <div className='flex flex-row gap-1 items-center'>
                             <NoteText size={16}/>
-                            <p>Add notes</p></div>
+                            <p>Add notes</p>
+                        </div>
                     </div>
                 </div>
-                
+                <div className='flex-1 overflow-hidden mb-3 mt-3'>
+                    <a href={article.link} className='font-bold text-xl my-2'>{article.title}</a>
+                    <p className='line-clamp-4 mt-2'>{article.description}</p>
+                </div>
+                <div className='flex flex-row gap-1'>
+                    <motion.a 
+                        href={article.link}
+                        className='block mb-2'
+                        whileHover={{scale: 1.1, color: 'blue'}}
+                    > Read more</motion.a>
+                </div>
+                <div className='flex flex-row justify-between gap-3 text-sm'>
+                    <p>{article.author}</p>  
+                    <p>{formattedDate}</p> 
+                </div>
+            </div>
         </div>
     )
 }
@@ -47,7 +53,6 @@ export default function Article ({article}) {
 Article.propTypes = {
     article: PropTypes.shape({
         title: PropTypes.string.isRequired,
-        // category: PropTypes.arrayOf(PropTypes.string).isRequired,
         category: PropTypes.string.isRequired,
         description: PropTypes.string.isRequired,
         link: PropTypes.string.isRequired,
