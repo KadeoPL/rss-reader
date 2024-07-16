@@ -3,7 +3,7 @@ import { format } from 'date-fns';
 import {NoteText } from 'iconsax-react';
 import FavoriteButton from './FavoriteButton';
 
-export default function Article ({article, isFavorite}) {
+export default function Article ({article}) {
 
     const pubDate = new Date(article.pubDate);
     const formattedDate = format(pubDate, 'dd.MM.yyyy');
@@ -30,10 +30,10 @@ export default function Article ({article, isFavorite}) {
                     </div>
                     <div className='flex flex-row justify-between gap-3 text-sm'>
                         <p>{article.author}</p>  
-                        <p>{formattedDate}</p>  
+                        <p>{formattedDate}</p> 
                     </div>
                     <div className='flex flex-row gap-4 mt-3 text-sm'>
-                        <FavoriteButton article={article} isFavorite={isFavorite}/>
+                        <FavoriteButton article={article}/>
                         <div className='flex flex-row gap-1 items-center'>
                             <NoteText size={16}/>
                             <p>Add notes</p></div>

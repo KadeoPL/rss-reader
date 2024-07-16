@@ -1,5 +1,5 @@
-import {createSlice, createAsyncThunk} from '@reduxjs/toolkit';
-import RSSParser from '../../utils/RSSParser'
+import {createSlice, createAsyncThunk, nanoid} from '@reduxjs/toolkit';
+import RSSParser from '../../utils/rssParser'
 
 export const fetchArticles = createAsyncThunk(
     'articles/fetchArticles',
@@ -14,11 +14,18 @@ const articlesSlice = createSlice ({
     name: 'articles',
     initialState: {
         items: [],
-        isFavorite: false,
         status: 'idle',
         error: null,
     },
-    reducers: {},
+    reducers: {
+        toggleFavorite: (state, action) => {
+            const articleId = action.payload;
+            const article = state.items.find(item => item.id === articleId);
+            if(article){
+                article.isFavorite = !article.isFavorite;
+            }
+        },
+    },
     extraReducers: (builder) => {
         builder
         .addCase(fetchArticles.pending, (state) => {
@@ -26,13 +33,17 @@ const articlesSlice = createSlice ({
         })
         .addCase(fetchArticles.fulfilled, (state, action) => {
             state.status = 'succeeded';
-            state.items = action.payload;
+            state.items = action.payload.map(article => ({
+                ...article,
+                isFavorite: false,
+                id: nanoid(),
+            }))
         })
         .addCase(fetchArticles.rejected, (state, action) => {
             state.status = 'failed';
-            state.error - action.error.message;
+            state.error = action.error.message
         })
     }
 })
-
+export const { toggleFavorite } = articlesSlice.actions;
 export default articlesSlice.reducer;
