@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import { format } from 'date-fns';
-import { NoteText, Weight } from 'iconsax-react';
+import { NoteText} from 'iconsax-react';
 import FavoriteButton from './FavoriteButton';
 import { motion } from 'framer-motion';
 
