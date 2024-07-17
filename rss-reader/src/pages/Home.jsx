@@ -23,7 +23,7 @@ export default function Home(){
   return (
     <div className="w-full mx-auto">
         <Navigation/>
-      <div className="flex flex-row flex-wrap gap-5 mx-5 justify-center">
+      <div className="flex flex-row flex-wrap gap-x-6 gap-y-10 mx-5 justify-center ">
         {content}
       </div>
     </div>

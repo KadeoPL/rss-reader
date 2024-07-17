@@ -5,7 +5,7 @@ import {useSelector } from "react-redux";
 export default function Favorites(){
     const favoriteArticles = useSelector((state) => state.favorites.items);
     return (
-        <div className="w-full mx-auto">
+        <div className="w-full mx-auto ">
             <Navigation />
             <div className="flex justify-center mb-5">
             <h1 className="text-2xl">Favorites</h1>

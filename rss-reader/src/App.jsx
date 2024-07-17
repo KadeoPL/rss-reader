@@ -13,14 +13,14 @@ function App() {
   }, [dispatch])
   
   return (
-    <>
+    <div className="min-h-screen bg-slate-200">
     <Routes>
         <Route path="/">
           <Route index element={<Home />} />
           <Route path="favorites" element={<Favorites />} />
         </Route>
       </Routes>
-    </>
+    </div>
   )
 }
 

@@ -22,13 +22,23 @@ export default function FavoriteButton ({article}){
     }
 
     return (
-        <div onClick={handleClick} className='flex flex-row gap-1 items-center cursor-pointer'>
+        <div onClick={handleClick} className='cursor-pointer'>
             <motion.div
-                whileHover={{ scale: 1.3 }}
+                whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
                 transition={{ type: "spring", stiffness: 400, damping: 10 }}
             >
-            <p className="">{article.isFavorite ? <Heart size={16} variant="Bold" color="red"/> : <Heart size={16}/>}</p>
+            <div>{article.isFavorite ?
+                <div className="flex gap-1 items-center">
+                    <Heart size={16} variant="Bold" color="red"/>
+                    <p>Remove</p>
+                </div> 
+                : 
+                <div className="flex gap-1 items-center">
+                    <Heart size={16}/>
+                    <p>Add favorite</p>
+                </div>   
+            }</div>
             </motion.div>
         </div>
     )
