@@ -26,7 +26,7 @@ export default function MarkAsReadButton({article}) {
                 whileTap={{ scale: 0.9 }}
                 transition={{ type: "spring", stiffness: 400, damping: 10 }}
             >
-            <div>{article.isRead ? <input className='cursor-pointer' type="checkbox" checked onChange={handleChange} /> :<input className='cursor-pointer' type="checkbox" onChange={handleChange} />}</div>
+            <div>{article.isRead ? <input className='cursor-pointer' type="checkbox" checked onChange={handleChange} /> : <input className='cursor-pointer' type="checkbox" onChange={handleChange} />}</div>
             </motion.div>
         </div>
     )
