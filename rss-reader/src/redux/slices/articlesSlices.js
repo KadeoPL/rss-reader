@@ -6,7 +6,8 @@ export const fetchArticles = createAsyncThunk(
     async (_, {getState}) => {
         const articles = await RSSParser();
         const { favorites } = getState();
-        return {articles, favorites: favorites.items}
+        const { read } = getState()
+        return {articles, favorites: favorites.items, reads: read.items}
     }
 
 )
@@ -26,6 +27,13 @@ const articlesSlice = createSlice ({
                 article.isFavorite = !article.isFavorite;
             }
         },
+        toggleRead: (state, action) => {
+            const articleLink = action.payload;
+            const article = state.items.find(item => item.link === articleLink);
+            if(article) {
+                article.isRead = !article.isRead;
+            }
+        }
     },
     extraReducers: (builder) => {
         builder
@@ -33,12 +41,13 @@ const articlesSlice = createSlice ({
             state.status = 'loading';
         })
         .addCase(fetchArticles.fulfilled, (state, action) => {
-            const { articles, favorites } = action.payload;
+            const { articles, favorites, reads } = action.payload;
             state.status = 'succeeded';
             state.items = articles.map(article => ({
                 ...article,
                 id: nanoid(),
                 isFavorite: favorites.some(fav => fav.link === article.link),
+                isRead: reads.some(read => read.link === article.link)
             }))
         })
         .addCase(fetchArticles.rejected, (state, action) => {
@@ -47,5 +56,5 @@ const articlesSlice = createSlice ({
         })
     }
 })
-export const { toggleFavorite } = articlesSlice.actions;
+export const { toggleFavorite, toggleRead } = articlesSlice.actions;
 export default articlesSlice.reducer;
