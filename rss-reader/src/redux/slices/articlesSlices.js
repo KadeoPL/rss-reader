@@ -3,9 +3,10 @@ import RSSParser from '../../utils/rssParser'
 
 export const fetchArticles = createAsyncThunk(
     'articles/fetchArticles',
-    async () => {
+    async (_, {getState}) => {
         const articles = await RSSParser();
-        return articles
+        const { favorites } = getState();
+        return {articles, favorites: favorites.items}
     }
 
 )
@@ -19,8 +20,8 @@ const articlesSlice = createSlice ({
     },
     reducers: {
         toggleFavorite: (state, action) => {
-            const articleId = action.payload;
-            const article = state.items.find(item => item.id === articleId);
+            const articleLink = action.payload;
+            const article = state.items.find(item => item.link === articleLink);
             if(article){
                 article.isFavorite = !article.isFavorite;
             }
@@ -32,11 +33,12 @@ const articlesSlice = createSlice ({
             state.status = 'loading';
         })
         .addCase(fetchArticles.fulfilled, (state, action) => {
+            const { articles, favorites } = action.payload;
             state.status = 'succeeded';
-            state.items = action.payload.map(article => ({
+            state.items = articles.map(article => ({
                 ...article,
-                isFavorite: false,
                 id: nanoid(),
+                isFavorite: favorites.some(fav => fav.link === article.link),
             }))
         })
         .addCase(fetchArticles.rejected, (state, action) => {

@@ -13,10 +13,10 @@ export default function FavoriteButton ({article}){
         const updatedArticle = { ...article, isFavorite: !article.isFavorite };
         
         if (article.isFavorite) {
-            dispatch(toggleFavorite(article.id));
+            dispatch(toggleFavorite(article.link));
             dispatch(removeFavorite(updatedArticle))
         } else {
-            dispatch(toggleFavorite(article.id));
+            dispatch(toggleFavorite(article.link));
             dispatch(addFavorite(updatedArticle))
         }
     }
