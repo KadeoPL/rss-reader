@@ -7,10 +7,15 @@ import { motion } from 'framer-motion';
 import categoryColor from '../functions/categoryColor.js';
 import { useEffect, useState } from 'react';
 
-export default function Article ({article}) {
+export default function Article ({article, onData}) {
     const [categoryBgColor, setCategoryBgColor] = useState('');
     const pubDate = new Date(article.pubDate);
     const formattedDate = format(pubDate, 'dd.MM.yyyy');
+
+    const setCategory = () => {
+        const category = article.category;
+        onData(category);
+      };
     
     const backgroundImage = {
         backgroundImage: `url(${article.image})`
@@ -27,7 +32,7 @@ export default function Article ({article}) {
             </div>
             <div className='flex flex-col flex-1 p-6'>
                 <div className='flex flex-row justify-between items-center text-sm hover:cursor-pointer'>
-                    <div className={`${categoryBgColor} py-1 px-3 text-sm rounded-md text-white`}>
+                    <div onClick={setCategory} className={`${categoryBgColor} py-1 px-3 text-sm rounded-md text-white`}>
                         {article.category}
                     </div>
                     <div className='flex flex-row flex-wrap text-xs ml-2'>
