@@ -3,6 +3,8 @@ import { useSelector, useDispatch } from "react-redux";
 import { fetchArticles } from "../redux/slices/articlesSlices";
 import Article from "../components/Article";
 import Navigation from "../components/Navigation";
+import {CloseCircle} from 'iconsax-react';
+import { motion } from 'framer-motion';
 
 export default function Home() {
   const dispatch = useDispatch();
@@ -12,6 +14,7 @@ export default function Home() {
   const [hideRead, setHideRead] = useState(false);
   const [isSortByCategory, setIsSortByCategory] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState('all');
+  const [categoryColor, setCategoryColor] = useState('');
 
   useEffect(() => {
     if (articlesStatus === 'idle') {
@@ -24,7 +27,8 @@ export default function Home() {
   };
 
   const handleCategorySelection = (category) => {
-    setSelectedCategory(category);
+    setSelectedCategory(category.category);
+    setCategoryColor(category.color);
     setIsSortByCategory(true)
   };
 
@@ -45,12 +49,14 @@ export default function Home() {
   return (
     <div className="w-full mx-auto">
       <Navigation />
-      <div className="flex gap-2">
-        <input type="checkbox" checked={hideRead} onChange={handleChange} />
-        <p>Hide read</p>
-      </div>
-      <div>
-        {isSortByCategory ? <button onClick={() => {setIsSortByCategory(false); setSelectedCategory('all')}}>{selectedCategory}</button> : <></>}
+      <div className="mx-8 flex flex-row justify-between">
+        <div className="flex gap-2">
+          <input type="checkbox" checked={hideRead} onChange={handleChange} />
+          <p>Hide read</p>
+        </div>
+        <div>
+          {isSortByCategory ? <motion.button whileHover={{scale: 1.1}} className={`${categoryColor} py-1 px-3 text-sm rounded-md text-white flex gap-2 items-center`} onClick={() => {setIsSortByCategory(false); setSelectedCategory('all')}}> <CloseCircle size={16}/>{selectedCategory}</motion.button> : <></>}
+        </div>
       </div>
       <div className="flex flex-row flex-wrap gap-x-6 gap-y-10 mx-5 justify-center">
         {content}

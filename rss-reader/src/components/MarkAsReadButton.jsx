@@ -25,8 +25,18 @@ export default function MarkAsReadButton({article}) {
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
                 transition={{ type: "spring", stiffness: 400, damping: 10 }}
+                className="cursor-pointer"
             >
-            <div>{article.isRead ? <input className='cursor-pointer' type="checkbox" checked onChange={handleChange} /> : <input className='cursor-pointer' type="checkbox" onChange={handleChange} />}</div>
+            <div>{article.isRead ?
+                <div className="flex gap-2" onClick={handleChange}>
+                    <input className='cursor-pointer' type="checkbox" checked  />
+                    <p>Mark as unread</p> 
+                </div> :
+                <div className="flex gap-2" onClick={handleChange}>
+                    <input className='cursor-pointer' type="checkbox" />
+                    <p>Mark as read</p> 
+                </div>}
+                </div>
             </motion.div>
         </div>
     )

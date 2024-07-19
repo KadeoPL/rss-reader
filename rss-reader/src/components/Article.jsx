@@ -7,13 +7,17 @@ import { motion } from 'framer-motion';
 import categoryColor from '../functions/categoryColor.js';
 import { useEffect, useState } from 'react';
 
+// eslint-disable-next-line react/prop-types
 export default function Article ({article, onData}) {
     const [categoryBgColor, setCategoryBgColor] = useState('');
     const pubDate = new Date(article.pubDate);
     const formattedDate = format(pubDate, 'dd.MM.yyyy');
 
     const setCategory = () => {
-        const category = article.category;
+        const category = {
+            category: article.category,
+            color: categoryBgColor,
+        }
         onData(category);
       };
     
@@ -27,7 +31,12 @@ export default function Article ({article, onData}) {
     
     
     return (
-        <div className='w-[300px] h-[500px] flex flex-col bg-white rounded-2xl shadow-md'>
+        <motion.div
+        animate={{
+            scale: [1, 1.5, 1],
+          }}
+          transition={{ duration: 0.5}}
+        className='w-[300px] h-[500px] flex flex-col bg-white rounded-2xl shadow-md'>
             <div style={backgroundImage} className='w-full h-[200px] bg-cover bg-center rounded-2xl'>
             </div>
             <div className='flex flex-col flex-1 p-6'>
@@ -44,10 +53,10 @@ export default function Article ({article, onData}) {
                     <a href={article.link} className='font-bold text-lg leading-3 my-2'>{article.title}</a>
                     <p className='line-clamp-3 text-sm mt-2'>{article.description}</p>
                 </div>
-                <div className='w-full'>
+                <div className='w-full flex justify-center text-center'>
                     <motion.a 
                         href={article.link}
-                        className='block mb-2 border-2 py-2 px-4 rounded-md text-sm text-blue-700 border-blue-700 hover:bg-blue-700 hover:text-white'
+                        className='block w-1/2  mb-2 border-2 py-2 px-4 rounded-md text-sm text-blue-700 border-blue-700 hover:bg-blue-700 hover:text-white'
                         whileHover={{scale: 1.1}}
                     >Read more</motion.a>
                 </div>
@@ -62,7 +71,7 @@ export default function Article ({article, onData}) {
                     </div>
                 </div>
             </div>
-        </div>
+        </motion.div>
     )
 }
 
@@ -78,3 +87,5 @@ Article.propTypes = {
     }).isRequired,
     isFavorite: PropTypes.bool,
 };
+
+

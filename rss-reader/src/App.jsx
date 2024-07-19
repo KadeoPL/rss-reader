@@ -4,7 +4,7 @@ import Favorites from "./pages/Favorites";
 
 function App() {
   return (
-    <div className="min-h-screen bg-slate-200">
+    <div className="min-h-screen bg-slate-200 ">
     <Routes>
         <Route path="/">
           <Route index element={<Home />} />
