@@ -1,10 +1,12 @@
 import { Link } from "react-router-dom";
 
-export default function Navigation() {
-  // let [searchParams, setSearchParams] = useSearchParams();
-
-  const handleSubmit = () => {
+export default function Navigation({ hideRead, setHideRead }) {
+  const handleSubmit = (event) => {
     event.preventDefault();
+  };
+
+  const handleChange = () => {
+    setHideRead((prev) => !prev);
   };
 
   return (
@@ -16,12 +18,19 @@ export default function Navigation() {
         <Link to="/favorites">Favorites</Link>
       </div>
       <div>
-        <input
-          type="search"
-          className="block border-2 border-gray-400 rounded-xl px-5 py-2 focus-visible:border-blue-300"
-          placeholder="Search..."
-          onSubmit={handleSubmit}
-        />
+        <div className="flex gap-2 cursor-pointer" onClick={handleChange}>
+          <input type="checkbox" checked={hideRead} />
+          <p>Hide read</p>
+        </div>
+      </div>
+      <div>
+        <form onSubmit={handleSubmit}>
+          <input
+            type="search"
+            className="block border-2 border-gray-400 rounded-xl px-5 py-2 focus-visible:border-blue-300"
+            placeholder="Search..."
+          />
+        </form>
       </div>
     </div>
   );

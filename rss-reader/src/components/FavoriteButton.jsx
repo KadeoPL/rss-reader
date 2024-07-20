@@ -31,12 +31,10 @@ export default function FavoriteButton({ article }) {
           {article.isFavorite ? (
             <div className="flex gap-1 items-center">
               <Heart size={16} variant="Bold" color="red" />
-              {/* <p>Remove</p> */}
             </div>
           ) : (
             <div className="flex gap-1 items-center">
               <Heart size={16} />
-              {/* <p>Add favorite</p> */}
             </div>
           )}
         </div>

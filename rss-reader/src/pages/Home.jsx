@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchArticles } from "../redux/slices/articlesSlices";
 import Article from "../components/Article";
@@ -7,16 +7,20 @@ import { CloseCircle } from "iconsax-react";
 import { motion } from "framer-motion";
 import { useSearchParams } from "react-router-dom";
 import chooseCategoryColor from "../functions/categoryColor";
+
 export default function Home() {
   const dispatch = useDispatch();
   const articles = useSelector((state) => state.articles.items);
   const articlesStatus = useSelector((state) => state.articles.status);
   const error = useSelector((state) => state.articles.error);
+
   const [hideRead, setHideRead] = useState(false);
   const [isSortByCategory, setIsSortByCategory] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [searchParams, setSearchParams] = useSearchParams();
-  const [categoryColor, setCategoryColor] = useState("");
+
+  const category = searchParams.get("category") || "all";
+  const categoryColor = chooseCategoryColor(category);
 
   useEffect(() => {
     if (articlesStatus === "idle") {
@@ -24,36 +28,30 @@ export default function Home() {
     }
   }, [articlesStatus, dispatch]);
 
-  const handleChange = () => {
-    setHideRead((prev) => !prev);
-  };
+  useEffect(() => {
+    if (category !== selectedCategory) {
+      setSelectedCategory(category);
+      setIsSortByCategory(category !== "all");
+    }
+  }, [category, selectedCategory]);
 
   const handleCategorySelection = (category) => {
-    setSelectedCategory(category.category);
-    setCategoryColor(chooseCategoryColor(selectedCategory));
     setSearchParams({ category: category.category });
-    setIsSortByCategory(true);
   };
 
-  useEffect(() => {
-    const category = searchParams.get("category");
-    if (category) {
-      setSelectedCategory(category);
-      setIsSortByCategory(true);
-    }
-  }, [searchParams]);
-
-  let content;
-  if (articlesStatus === "loading") {
-    content = <p>Loading...</p>;
-  } else if (articlesStatus === "succeeded") {
-    const filteredArticles = articles
+  const filteredArticles = useMemo(() => {
+    return articles
       .filter((article) => !hideRead || !article.isRead)
       .filter(
         (article) =>
           selectedCategory === "all" || article.category === selectedCategory
       );
+  }, [articles, hideRead, selectedCategory]);
 
+  let content;
+  if (articlesStatus === "loading") {
+    content = <p>Loading...</p>;
+  } else if (articlesStatus === "succeeded") {
     content = filteredArticles.map((article) => (
       <Article
         article={article}
@@ -67,12 +65,8 @@ export default function Home() {
 
   return (
     <div className="w-full mx-auto">
-      <Navigation />
+      <Navigation hideRead={hideRead} setHideRead={setHideRead} />
       <div className="mx-8 flex flex-row justify-between">
-        <div className="flex gap-2">
-          <input type="checkbox" checked={hideRead} onChange={handleChange} />
-          <p>Hide read</p>
-        </div>
         <div>
           {isSortByCategory && (
             <motion.button
@@ -80,12 +74,11 @@ export default function Home() {
               className={`${categoryColor} py-1 px-3 text-sm rounded-md text-white flex gap-2 items-center`}
               onClick={() => {
                 setIsSortByCategory(false);
-                setSelectedCategory("all");
                 setSearchParams({});
               }}
             >
               <CloseCircle size={16} />
-              {selectedCategory}
+              {category}
             </motion.button>
           )}
         </div>
