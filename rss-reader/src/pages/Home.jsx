@@ -3,8 +3,8 @@ import { useSelector, useDispatch } from "react-redux";
 import { fetchArticles } from "../redux/slices/articlesSlices";
 import Article from "../components/Article";
 import Navigation from "../components/Navigation";
-import { CloseCircle } from 'iconsax-react';
-import { motion } from 'framer-motion';
+import { CloseCircle } from "iconsax-react";
+import { motion } from "framer-motion";
 import { useSearchParams } from "react-router-dom";
 import chooseCategoryColor from "../functions/categoryColor";
 export default function Home() {
@@ -14,12 +14,12 @@ export default function Home() {
   const error = useSelector((state) => state.articles.error);
   const [hideRead, setHideRead] = useState(false);
   const [isSortByCategory, setIsSortByCategory] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState('all');
+  const [selectedCategory, setSelectedCategory] = useState("all");
   const [searchParams, setSearchParams] = useSearchParams();
-  const [categoryColor, setCategoryColor] = useState('');
+  const [categoryColor, setCategoryColor] = useState("");
 
   useEffect(() => {
-    if (articlesStatus === 'idle') {
+    if (articlesStatus === "idle") {
       dispatch(fetchArticles());
     }
   }, [articlesStatus, dispatch]);
@@ -31,7 +31,7 @@ export default function Home() {
   const handleCategorySelection = (category) => {
     setSelectedCategory(category.category);
     setCategoryColor(chooseCategoryColor(selectedCategory));
-    setSearchParams({ category: category.category});
+    setSearchParams({ category: category.category });
     setIsSortByCategory(true);
   };
 
@@ -44,17 +44,24 @@ export default function Home() {
   }, [searchParams]);
 
   let content;
-  if (articlesStatus === 'loading') {
+  if (articlesStatus === "loading") {
     content = <p>Loading...</p>;
-  } else if (articlesStatus === 'succeeded') {
+  } else if (articlesStatus === "succeeded") {
     const filteredArticles = articles
-      .filter(article => !hideRead || !article.isRead)
-      .filter(article => selectedCategory === 'all' || article.category === selectedCategory);
+      .filter((article) => !hideRead || !article.isRead)
+      .filter(
+        (article) =>
+          selectedCategory === "all" || article.category === selectedCategory
+      );
 
-    content = filteredArticles.map(article => (
-      <Article article={article} key={article.id} onData={handleCategorySelection} />
+    content = filteredArticles.map((article) => (
+      <Article
+        article={article}
+        key={article.id}
+        onData={handleCategorySelection}
+      />
     ));
-  } else if (articlesStatus === 'failed') {
+  } else if (articlesStatus === "failed") {
     content = <p>{error}</p>;
   }
 
@@ -73,7 +80,7 @@ export default function Home() {
               className={`${categoryColor} py-1 px-3 text-sm rounded-md text-white flex gap-2 items-center`}
               onClick={() => {
                 setIsSortByCategory(false);
-                setSelectedCategory('all');
+                setSelectedCategory("all");
                 setSearchParams({});
               }}
             >
