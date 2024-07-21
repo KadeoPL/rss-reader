@@ -3,10 +3,10 @@ import { useSelector, useDispatch } from "react-redux";
 import { fetchArticles } from "../redux/slices/articlesSlices";
 import Article from "../components/Article";
 import Navigation from "../components/Navigation";
-import { CloseCircle } from "iconsax-react";
-import { motion } from "framer-motion";
+
 import { useSearchParams } from "react-router-dom";
-import chooseCategoryColor from "../functions/categoryColor";
+
+import sortByCategory from "../functions/sortByCategory";
 
 export default function Home() {
   const dispatch = useDispatch();
@@ -15,12 +15,11 @@ export default function Home() {
   const error = useSelector((state) => state.articles.error);
 
   const [hideRead, setHideRead] = useState(false);
-  const [isSortByCategory, setIsSortByCategory] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [searchParams, setSearchParams] = useSearchParams();
+  const [isSortByCategory, setIsSortByCategory] = useState(false);
 
   const category = searchParams.get("category") || "all";
-  const categoryColor = chooseCategoryColor(category);
 
   useEffect(() => {
     if (articlesStatus === "idle") {
@@ -37,15 +36,11 @@ export default function Home() {
 
   const handleCategorySelection = (category) => {
     setSearchParams({ category: category.category });
+    setIsSortByCategory(!isSortByCategory);
   };
 
   const filteredArticles = useMemo(() => {
-    return articles
-      .filter((article) => !hideRead || !article.isRead)
-      .filter(
-        (article) =>
-          selectedCategory === "all" || article.category === selectedCategory
-      );
+    return sortByCategory(articles, selectedCategory, hideRead);
   }, [articles, hideRead, selectedCategory]);
 
   let content;
@@ -65,24 +60,12 @@ export default function Home() {
 
   return (
     <div className="w-full mx-auto">
-      <Navigation hideRead={hideRead} setHideRead={setHideRead} />
-      <div className="mx-8 flex flex-row justify-between">
-        <div>
-          {isSortByCategory && (
-            <motion.button
-              whileHover={{ scale: 1.1 }}
-              className={`${categoryColor} py-1 px-3 text-sm rounded-md text-white flex gap-2 items-center`}
-              onClick={() => {
-                setIsSortByCategory(false);
-                setSearchParams({});
-              }}
-            >
-              <CloseCircle size={16} />
-              {category}
-            </motion.button>
-          )}
-        </div>
-      </div>
+      <Navigation
+        hideRead={hideRead}
+        setHideRead={setHideRead}
+        isSortByCategory={isSortByCategory}
+      />
+      <div className="mx-8 flex flex-row justify-between"></div>
       <div className="flex flex-row flex-wrap gap-x-6 gap-y-10 mx-5 justify-center">
         {content}
       </div>
