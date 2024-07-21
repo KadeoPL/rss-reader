@@ -8,7 +8,7 @@ import categoryColor from "../functions/categoryColor.js";
 import { useEffect, useState } from "react";
 
 // eslint-disable-next-line react/prop-types
-export default function Article({ article, onData }) {
+export default function Article({ article, oncategoryselect }) {
   const [categoryBgColor, setCategoryBgColor] = useState("");
   const pubDate = new Date(article.pubDate);
   const formattedDate = format(pubDate, "dd.MM.yyyy");
@@ -18,7 +18,7 @@ export default function Article({ article, onData }) {
       category: article.category,
       color: categoryBgColor,
     };
-    onData(category);
+    oncategoryselect(category);
   };
 
   const backgroundImage = {

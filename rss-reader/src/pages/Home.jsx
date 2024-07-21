@@ -56,7 +56,7 @@ export default function Home() {
       <Article
         article={article}
         key={article.id}
-        onData={handleCategorySelection}
+        oncategoryselect={handleCategorySelection}
       />
     ));
   } else if (articlesStatus === "failed") {

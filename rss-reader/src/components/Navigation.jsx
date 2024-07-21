@@ -19,7 +19,7 @@ export default function Navigation({ hideRead, setHideRead }) {
       </div>
       <div>
         <div className="flex gap-2 cursor-pointer" onClick={handleChange}>
-          <input type="checkbox" checked={hideRead} />
+          <input type="checkbox" checked={hideRead} readOnly />
           <p>Hide read</p>
         </div>
       </div>
