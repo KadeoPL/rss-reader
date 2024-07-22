@@ -7,7 +7,8 @@ import { CloseCircle } from "iconsax-react";
 export default function Navigation({
   hideRead,
   setHideRead,
-  isSortByCategory,
+  category,
+  resetCategory,
 }) {
   const categoryColor = chooseCategoryColor(category);
 
@@ -28,14 +29,14 @@ export default function Navigation({
         <Link to="/favorites">Favorites</Link>
       </div>
       <div></div>
-      <div className="flex flex-col jusify-center items-center gap-5 md:flex-row">
+      <div className="flex flex-col justify-center items-center gap-5 md:flex-row">
         <div>
-          {isSortByCategory && (
+          {category !== "all" && (
             <motion.button
               whileHover={{ scale: 1.1 }}
               className={`${categoryColor} py-1 px-3 text-sm rounded-md text-white flex gap-2 items-center`}
               onClick={() => {
-                setSearchParams({});
+                resetCategory();
               }}
             >
               <CloseCircle size={16} />
@@ -62,4 +63,6 @@ export default function Navigation({
 Navigation.propTypes = {
   hideRead: PropTypes.bool.isRequired,
   setHideRead: PropTypes.func.isRequired,
+  category: PropTypes.string.isRequired,
+  resetCategory: PropTypes.func.isRequired,
 };

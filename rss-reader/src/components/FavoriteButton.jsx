@@ -1,6 +1,6 @@
 import { Heart } from "iconsax-react";
 import { addFavorite, removeFavorite } from "../redux/slices/favoritesSlices";
-import { toggleFavorite } from "../redux/slices/articlesSlices";
+// import { toggleFavorite } from "../redux/slices/articlesSlices";
 import { useDispatch } from "react-redux";
 import PropTypes from "prop-types";
 import { motion } from "framer-motion";
@@ -12,10 +12,10 @@ export default function FavoriteButton({ article }) {
     const updatedArticle = { ...article, isFavorite: !article.isFavorite };
 
     if (article.isFavorite) {
-      dispatch(toggleFavorite(article.link));
+      // dispatch(toggleFavorite(article.link));
       dispatch(removeFavorite(updatedArticle));
     } else {
-      dispatch(toggleFavorite(article.link));
+      // dispatch(toggleFavorite(article.link));
       dispatch(addFavorite(updatedArticle));
     }
   };

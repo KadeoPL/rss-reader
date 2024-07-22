@@ -3,9 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { fetchArticles } from "../redux/slices/articlesSlices";
 import Article from "../components/Article";
 import Navigation from "../components/Navigation";
-
 import { useSearchParams } from "react-router-dom";
-
 import sortByCategory from "../functions/sortByCategory";
 
 export default function Home() {
@@ -39,6 +37,12 @@ export default function Home() {
     setIsSortByCategory(!isSortByCategory);
   };
 
+  const resetCategory = () => {
+    setSearchParams({ category: "all" });
+    setSelectedCategory("all");
+    setIsSortByCategory(false);
+  };
+
   const filteredArticles = useMemo(() => {
     return sortByCategory(articles, selectedCategory, hideRead);
   }, [articles, hideRead, selectedCategory]);
@@ -63,7 +67,8 @@ export default function Home() {
       <Navigation
         hideRead={hideRead}
         setHideRead={setHideRead}
-        isSortByCategory={isSortByCategory}
+        category={category}
+        resetCategory={resetCategory}
       />
       <div className="mx-8 flex flex-row justify-between"></div>
       <div className="flex flex-row flex-wrap gap-x-6 gap-y-10 mx-5 justify-center">
