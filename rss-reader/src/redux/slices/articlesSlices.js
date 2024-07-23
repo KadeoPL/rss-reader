@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import RSSParser from "../../utils/rssParser";
+import { createSelector } from "reselect";
 
 const initialState = {
   articles: [],
@@ -27,20 +28,28 @@ const articlesSlice = createSlice({
         article.isFavorite = !article.isFavorite;
       }
     },
+    markAsRead: (state, action) => {
+      const article = state.articles.find(
+        (article) => article.link === action.payload
+      );
+      if (article) {
+        article.isRead = !article.isRead;
+      }
+    },
   },
-  extraReducers(builder) {
+  extraReducers: (builder) => {
     builder
       .addCase(fetchArticles.pending, (state) => {
         state.status = "loading";
       })
       .addCase(fetchArticles.fulfilled, (state, action) => {
         state.status = "succeeded";
-        const newArticles = action.payload.map((articles) => {
+        const newArticles = action.payload.map((article) => {
           const existingArticle = state.articles.find(
-            (article) => article.link === articles.link
+            (existing) => existing.link === article.link
           );
           return {
-            ...articles,
+            ...article,
             isFavorite: existingArticle ? existingArticle.isFavorite : false,
             isRead: existingArticle ? existingArticle.isRead : false,
           };
@@ -54,10 +63,14 @@ const articlesSlice = createSlice({
   },
 });
 
-export const getAllFavorites = (state) =>
-  state.articles.articles.filter((article) => article.isFavorite);
-export const { toggleFavorite } = articlesSlice.actions;
+export const { toggleFavorite, markAsRead } = articlesSlice.actions;
+
 export const selectAllArticles = (state) => state.articles.articles;
 export const getArticlesError = (state) => state.articles.error;
 export const getArticlesStatus = (state) => state.articles.status;
+
+export const getAllFavorites = createSelector([selectAllArticles], (articles) =>
+  articles.filter((article) => article.isFavorite)
+);
+
 export default articlesSlice.reducer;

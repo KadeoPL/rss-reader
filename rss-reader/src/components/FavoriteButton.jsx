@@ -9,7 +9,6 @@ export default function FavoriteButton({ article }) {
 
   const handleClick = () => {
     dispatch(toggleFavorite(article.link));
-    console.log(article);
   };
 
   return (

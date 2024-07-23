@@ -1,8 +1,16 @@
 import { Link } from "react-router-dom";
+import HideReadButton from "./HideReadButton";
+import { useState } from "react";
 
 export default function NavigationBar() {
+  const [isHide, setIsHide] = useState(false);
   const handleSubmit = (event) => {
     event.preventDefault();
+  };
+
+  const handleIsHeadRead = (isHideRead) => {
+    setIsHide(isHideRead);
+    console.log(isHide);
   };
 
   return (
@@ -13,6 +21,7 @@ export default function NavigationBar() {
         </Link>
         <Link to="/favorites">Favorites</Link>
       </div>
+      <HideReadButton isHideRead={handleIsHeadRead} />
       <form onSubmit={handleSubmit}>
         <input
           type="search"
