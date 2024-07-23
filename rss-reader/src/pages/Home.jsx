@@ -1,75 +1,39 @@
-import { useState, useEffect, useMemo } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { fetchArticles } from "../redux/slices/articlesSlices";
+import { useSelector } from "react-redux";
+import NavigationBar from "../components/NavigationBar.jsx";
+
+import {
+  selectAllArticles,
+  getArticlesStatus,
+  getArticlesError,
+} from "../redux/slices/articlesSlices";
+
 import Article from "../components/Article";
-import Navigation from "../components/Navigation";
-import { useSearchParams } from "react-router-dom";
-import sortByCategory from "../functions/sortByCategory";
 
 export default function Home() {
-  const dispatch = useDispatch();
-  const articles = useSelector((state) => state.articles.items);
-  const articlesStatus = useSelector((state) => state.articles.status);
-  const error = useSelector((state) => state.articles.error);
-
-  const [hideRead, setHideRead] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState("all");
-  const [searchParams, setSearchParams] = useSearchParams();
-  const [isSortByCategory, setIsSortByCategory] = useState(false);
-
-  const category = searchParams.get("category") || "all";
-
-  useEffect(() => {
-    if (articlesStatus === "idle") {
-      dispatch(fetchArticles());
-    }
-  }, [articlesStatus, dispatch]);
-
-  useEffect(() => {
-    if (category !== selectedCategory) {
-      setSelectedCategory(category);
-      setIsSortByCategory(category !== "all");
-    }
-  }, [category, selectedCategory]);
-
-  const handleCategorySelection = (category) => {
-    setSearchParams({ category: category.category });
-    setIsSortByCategory(!isSortByCategory);
-  };
-
-  const resetCategory = () => {
-    setSearchParams({ category: "all" });
-    setSelectedCategory("all");
-    setIsSortByCategory(false);
-  };
-
-  const filteredArticles = useMemo(() => {
-    return sortByCategory(articles, selectedCategory, hideRead);
-  }, [articles, hideRead, selectedCategory]);
+  const articles = useSelector(selectAllArticles);
+  const status = useSelector(getArticlesStatus);
+  const error = useSelector(getArticlesError);
 
   let content;
-  if (articlesStatus === "loading") {
-    content = <p>Loading...</p>;
-  } else if (articlesStatus === "succeeded") {
-    content = filteredArticles.map((article) => (
-      <Article
-        article={article}
-        key={article.id}
-        oncategoryselect={handleCategorySelection}
-      />
-    ));
-  } else if (articlesStatus === "failed") {
-    content = <p>{error}</p>;
+
+  if (status === "loading") {
+    content = <div className="text-center my-5">Loading...</div>;
+  } else if (status === "succeeded") {
+    content = articles.map((article, i) => {
+      return <Article article={article} key={i} />;
+    });
+  } else if (status === "failed") {
+    content = (
+      <>
+        <h1>Articles not found</h1>
+        <p className="text-center text-danger">{error}</p>
+      </>
+    );
   }
 
   return (
     <div className="w-full mx-auto">
-      <Navigation
-        hideRead={hideRead}
-        setHideRead={setHideRead}
-        category={category}
-        resetCategory={resetCategory}
-      />
+      <NavigationBar />
       <div className="mx-8 flex flex-row justify-between"></div>
       <div className="flex flex-row flex-wrap gap-x-6 gap-y-10 mx-5 justify-center">
         {content}
