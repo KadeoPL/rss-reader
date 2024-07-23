@@ -1,5 +1,6 @@
 import { useSelector } from "react-redux";
 import NavigationBar from "../components/NavigationBar.jsx";
+import { getIsHideRead } from "../redux/slices/hideReadSlices.js";
 
 import {
   selectAllArticles,
@@ -13,15 +14,16 @@ export default function Home() {
   const articles = useSelector(selectAllArticles);
   const status = useSelector(getArticlesStatus);
   const error = useSelector(getArticlesError);
+  const isHideRead = useSelector(getIsHideRead);
 
   let content;
 
   if (status === "loading") {
     content = <div className="text-center my-5">Loading...</div>;
   } else if (status === "succeeded") {
-    content = articles.map((article, i) => {
-      return <Article article={article} key={i} />;
-    });
+    content = articles
+      .filter((article) => !isHideRead || !article.isRead)
+      .map((article, i) => <Article article={article} key={i} />);
   } else if (status === "failed") {
     content = (
       <>

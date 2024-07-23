@@ -12,6 +12,6 @@ const hideReadSlice = createSlice({
   },
 });
 
-export const getIsHideRead = (state) => state.isHide;
+export const getIsHideRead = (state) => state.hideRead.isHide;
 export const { toggleIsHideRead } = hideReadSlice.actions;
 export default hideReadSlice.reducer;

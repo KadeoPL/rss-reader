@@ -8,7 +8,7 @@ const persistedState = loadState();
 const store = configureStore({
   reducer: {
     articles: articlesReducer,
-    isHideRead: hideReadSlices,
+    hideRead: hideReadSlices,
   },
   preloadedState: persistedState,
 });
