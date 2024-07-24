@@ -16,9 +16,11 @@ export default function NavigationBar() {
         <Link to="/favorites">Favorites</Link>
       </div>
 
-      <div>
-        <DiselectCategoryButton />
-        <HideReadButton />
+      <div className="flex flex-col md:flex-row md:items-center ">
+        <div className="flex flex-row gap-5 justify-center items-center mb-5 md:mb-0 md:mr-5">
+          <DiselectCategoryButton />
+          <HideReadButton />
+        </div>
         <form onSubmit={handleSubmit}>
           <input
             type="search"
