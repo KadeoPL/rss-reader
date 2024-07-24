@@ -9,12 +9,14 @@ import {
 } from "../redux/slices/articlesSlices";
 
 import Article from "../components/Article";
+import { getCategoryToSort } from "../redux/slices/sortByCategory.js";
 
 export default function Home() {
   const articles = useSelector(selectAllArticles);
   const status = useSelector(getArticlesStatus);
   const error = useSelector(getArticlesError);
   const isHideRead = useSelector(getIsHideRead);
+  const categorySort = useSelector(getCategoryToSort);
 
   let content;
 
@@ -23,6 +25,11 @@ export default function Home() {
   } else if (status === "succeeded") {
     content = articles
       .filter((article) => !isHideRead || !article.isRead)
+      .filter(
+        (article) =>
+          categorySort.category === "all" ||
+          article.category === categorySort.category
+      )
       .map((article, i) => <Article article={article} key={i} />);
   } else if (status === "failed") {
     content = (
@@ -37,7 +44,7 @@ export default function Home() {
     <div className="w-full mx-auto">
       <NavigationBar />
       <div className="mx-8 flex flex-row justify-between"></div>
-      <div className="flex flex-row flex-wrap gap-x-6 gap-y-10 mx-5 justify-center">
+      <div className="flex flex-row flex-wrap gap-x-4 gap-y-10 mx-5 justify-center">
         {content}
       </div>
     </div>

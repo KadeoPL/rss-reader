@@ -4,30 +4,16 @@ import { NoteText } from "iconsax-react";
 import FavoriteButton from "./FavoriteButton";
 import MarkAsReadButton from "./MarkAsReadButton.jsx";
 import { motion } from "framer-motion";
-import categoryColor from "../functions/categoryColor.js";
-import { useEffect, useState } from "react";
+import SelectCategoryButton from "./SelectCategoryButton.jsx";
 
 // eslint-disable-next-line react/prop-types
-export default function Article({ article, oncategoryselect }) {
-  const [categoryBgColor, setCategoryBgColor] = useState("");
+export default function Article({ article }) {
   const pubDate = new Date(article.pubDate);
   const formattedDate = format(pubDate, "dd.MM.yyyy");
-
-  const setCategory = () => {
-    const category = {
-      category: article.category,
-      color: categoryBgColor,
-    };
-    oncategoryselect(category);
-  };
 
   const backgroundImage = {
     backgroundImage: `url(${article.image})`,
   };
-
-  useEffect(() => {
-    setCategoryBgColor(categoryColor(article.category));
-  }, [article.category]);
 
   return (
     <motion.div
@@ -35,39 +21,25 @@ export default function Article({ article, oncategoryselect }) {
         scale: [1, 1.5, 1],
       }}
       transition={{ duration: 0.5 }}
-      className="w-[300px] h-[500px] flex flex-col bg-white rounded-2xl shadow-md"
+      className="w-[320px] h-[460px] flex flex-col bg-white rounded-2xl shadow-md"
     >
       <div
         style={backgroundImage}
         className="w-full h-[200px] bg-cover bg-center rounded-2xl"
       ></div>
-      <div className="flex flex-col flex-1 p-6">
+      <div className="flex flex-col flex-1 p-5">
         <div className="flex flex-row justify-between items-center text-sm hover:cursor-pointer">
-          <div
-            onClick={setCategory}
-            className={`${categoryBgColor} py-1 px-3 text-sm rounded-md text-white`}
-          >
-            {article.category}
-          </div>
+          <SelectCategoryButton text={article.category} />
           <div className="flex flex-row flex-wrap text-xs ml-2">
             <p>{article.author}, </p>
             <p>{formattedDate}</p>
           </div>
         </div>
-        <div className="flex-1 overflow-hidden mb-3 mt-3">
+        <div className="flex-1 overflow-hidden mb-5 mt-3">
           <a href={article.link} className="font-bold text-lg leading-3 my-2">
             {article.title}
           </a>
           <p className="line-clamp-3 text-sm mt-2">{article.description}</p>
-        </div>
-        <div className="w-full flex justify-center text-center">
-          <motion.a
-            href={article.link}
-            className="block w-1/2  mb-2 border-2 py-2 px-4 rounded-md text-sm text-blue-700 border-blue-700 hover:bg-blue-700 hover:text-white"
-            whileHover={{ scale: 1.1 }}
-          >
-            Read more
-          </motion.a>
         </div>
         <div>
           <div className="flex flex-row justify-between text-sm items-center">

@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import HideReadButton from "./HideReadButton";
+import DiselectCategoryButton from "./DiselectCategoryButton";
 
 export default function NavigationBar() {
   const handleSubmit = (event) => {
@@ -14,14 +15,18 @@ export default function NavigationBar() {
         </Link>
         <Link to="/favorites">Favorites</Link>
       </div>
-      <HideReadButton />
-      <form onSubmit={handleSubmit}>
-        <input
-          type="search"
-          className="block border-2 border-gray-400 rounded-xl px-5 py-2 focus-visible:border-blue-300"
-          placeholder="Search..."
-        />
-      </form>
+
+      <div>
+        <DiselectCategoryButton />
+        <HideReadButton />
+        <form onSubmit={handleSubmit}>
+          <input
+            type="search"
+            className="block border-2 border-gray-400 rounded-xl px-5 py-2 focus-visible:border-blue-300"
+            placeholder="Search..."
+          />
+        </form>
+      </div>
     </div>
   );
 }
