@@ -31,7 +31,7 @@ export default function Article({ article }) {
         <div className="flex flex-row justify-between items-center text-sm hover:cursor-pointer">
           <SelectCategoryButton text={article.category} />
           <div className="flex flex-row flex-wrap text-xs ml-2">
-            <p>{article.author}, </p>
+            <p className="mr-1">{article.author},</p>
             <p>{formattedDate}</p>
           </div>
         </div>

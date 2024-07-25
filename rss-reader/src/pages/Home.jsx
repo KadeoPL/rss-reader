@@ -10,6 +10,7 @@ import {
 
 import Article from "../components/Article";
 import { getCategoryToSort } from "../redux/slices/sortByCategory.js";
+import { useState } from "react";
 
 export default function Home() {
   const articles = useSelector(selectAllArticles);
@@ -17,9 +18,12 @@ export default function Home() {
   const error = useSelector(getArticlesError);
   const isHideRead = useSelector(getIsHideRead);
   const categorySort = useSelector(getCategoryToSort);
+  const [searchText, setSearchText] = useState("");
 
   let content;
-
+  const handleSearchText = (text) => {
+    setSearchText(text);
+  };
   if (status === "loading") {
     content = <div className="text-center my-5">Loading...</div>;
   } else if (status === "succeeded") {
@@ -29,6 +33,9 @@ export default function Home() {
         (article) =>
           categorySort.category === "all" ||
           article.category === categorySort.category
+      )
+      .filter((article) =>
+        article.title.toLowerCase().includes(searchText.toLowerCase())
       )
       .map((article, i) => <Article article={article} key={i} />);
   } else if (status === "failed") {
@@ -42,7 +49,7 @@ export default function Home() {
 
   return (
     <div className="w-full mx-auto">
-      <NavigationBar />
+      <NavigationBar sendSearchText={handleSearchText} />
       <div className="mx-8 flex flex-row justify-between"></div>
       <div className="flex flex-row flex-wrap gap-x-4 gap-y-10 mx-5 justify-center">
         {content}

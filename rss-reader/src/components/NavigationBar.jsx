@@ -1,10 +1,20 @@
 import { Link } from "react-router-dom";
 import HideReadButton from "./HideReadButton";
 import DiselectCategoryButton from "./DiselectCategoryButton";
+import { useState } from "react";
 
-export default function NavigationBar() {
-  const handleSubmit = (event) => {
-    event.preventDefault();
+export default function NavigationBar({ sendSearchText }) {
+  const [searchText, setSearchText] = useState("");
+
+  const handleChange = (e) => {
+    setSearchText(e.target.value);
+    sendSearchText(searchText);
+  };
+
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+    }
   };
 
   return (
@@ -21,11 +31,14 @@ export default function NavigationBar() {
           <DiselectCategoryButton />
           <HideReadButton />
         </div>
-        <form onSubmit={handleSubmit}>
+        <form>
           <input
             type="search"
             className="block border-2 border-gray-400 rounded-xl px-5 py-2 focus-visible:border-blue-300"
-            placeholder="Search..."
+            placeholder="Search by title..."
+            value={searchText}
+            onChange={handleChange}
+            onKeyPress={handleKeyPress}
           />
         </form>
       </div>
