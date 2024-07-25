@@ -1,14 +1,25 @@
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import HideReadButton from "./HideReadButton";
 import DiselectCategoryButton from "./DiselectCategoryButton";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function NavigationBar({ sendSearchText }) {
-  const [searchText, setSearchText] = useState("");
+  const [searchParams, setSearchParams] = useSearchParams();
+  const initialSearchText = searchParams.get("search") || "";
+  const [searchText, setSearchText] = useState(initialSearchText);
+
+  useEffect(() => {
+    sendSearchText(searchText);
+  }, [searchText, sendSearchText]);
 
   const handleChange = (e) => {
-    setSearchText(e.target.value);
-    sendSearchText(searchText);
+    const newSearchText = e.target.value;
+    setSearchText(newSearchText);
+    if (newSearchText) {
+      setSearchParams({ search: newSearchText });
+    } else {
+      setSearchParams({});
+    }
   };
 
   const handleKeyPress = (e) => {
@@ -26,7 +37,7 @@ export default function NavigationBar({ sendSearchText }) {
         <Link to="/favorites">Favorites</Link>
       </div>
 
-      <div className="flex flex-col md:flex-row md:items-center ">
+      <div className="flex flex-col md:flex-row md:items-center">
         <div className="flex flex-row gap-5 justify-center items-center mb-5 md:mb-0 md:mr-5">
           <DiselectCategoryButton />
           <HideReadButton />
