@@ -2,6 +2,7 @@ import { Link, useSearchParams } from "react-router-dom";
 import HideReadButton from "./HideReadButton";
 import DiselectCategoryButton from "./DiselectCategoryButton";
 import { useState, useEffect } from "react";
+import SelectSortInput from "./SelectSortInput";
 
 export default function NavigationBar({ sendSearchText }) {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -39,6 +40,7 @@ export default function NavigationBar({ sendSearchText }) {
 
       <div className="flex flex-col md:flex-row md:items-center">
         <div className="flex flex-row gap-5 justify-center items-center mb-5 md:mb-0 md:mr-5">
+          <SelectSortInput />
           <DiselectCategoryButton />
           <HideReadButton />
         </div>
