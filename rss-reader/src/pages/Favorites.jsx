@@ -1,32 +1,40 @@
 import Article from "../components/Article";
-import Navigation from "../components/Navigation";
 import { useSelector } from "react-redux";
-import { useState, useMemo } from "react";
+import { getAllFavorites } from "../redux/slices/articlesSlices";
+import NavigationBar from "../components/NavigationBar";
+import { getIsHideRead } from "../redux/slices/hideReadSlices.js";
+import { getCategoryToSort } from "../redux/slices/sortByCategory.js";
+import { useState } from "react";
 
 export default function Favorites() {
-  const favoriteArticles = useSelector((state) => state.favorites.items);
-  const readArticles = useSelector((state) => state.read.items);
-  const [hideRead, setHideRead] = useState(false);
+  const favArticles = useSelector(getAllFavorites);
+  const isHideRead = useSelector(getIsHideRead);
+  const categorySort = useSelector(getCategoryToSort);
+  const [searchText, setSearchText] = useState("");
 
-  const filteredArticles = useMemo(() => {
-    return favoriteArticles
-      .map((fav) => ({
-        ...fav,
-        isRead: readArticles.some((read) => read.link === fav.link),
-      }))
-      .filter((article) => !hideRead || !article.isRead);
-  }, [favoriteArticles, readArticles, hideRead]);
+  let content;
+
+  const handleSearchText = (text) => {
+    setSearchText(text);
+  };
+
+  content = favArticles
+    .filter((article) => !isHideRead || !article.isRead)
+    .filter(
+      (article) =>
+        categorySort.category === "all" ||
+        article.category === categorySort.category
+    )
+    .filter((article) =>
+      article.title.toLowerCase().includes(searchText.toLowerCase())
+    )
+    .map((article, i) => <Article article={article} key={i} />);
 
   return (
     <div className="w-full mx-auto">
-      <Navigation hideRead={hideRead} setHideRead={setHideRead} />
-      <div className="flex justify-center mb-5">
-        <h1 className="text-2xl">Favorites</h1>
-      </div>
+      <NavigationBar sendSearchText={handleSearchText} />
       <div className="flex flex-row flex-wrap gap-5 mx-5 justify-center">
-        {filteredArticles.map((article) => (
-          <Article article={article} key={article.id} />
-        ))}
+        {content}
       </div>
     </div>
   );

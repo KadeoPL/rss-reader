@@ -1,34 +1,37 @@
-import { createSlice, createAsyncThunk, nanoid } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import RSSParser from "../../utils/rssParser";
+import { createSelector } from "reselect";
+
+const initialState = {
+  articles: [],
+  status: "idle",
+  error: "",
+};
 
 export const fetchArticles = createAsyncThunk(
   "articles/fetchArticles",
-  async (_, { getState }) => {
+  async () => {
     const articles = await RSSParser();
-    const { favorites } = getState();
-    const { read } = getState();
-    return { articles, favorites: favorites.items, reads: read.items };
+    return articles;
   }
 );
 
 const articlesSlice = createSlice({
   name: "articles",
-  initialState: {
-    items: [],
-    status: "idle",
-    error: null,
-  },
+  initialState,
   reducers: {
     toggleFavorite: (state, action) => {
-      const articleLink = action.payload;
-      const article = state.items.find((item) => item.link === articleLink);
+      const article = state.articles.find(
+        (article) => article.link === action.payload
+      );
       if (article) {
         article.isFavorite = !article.isFavorite;
       }
     },
-    toggleRead: (state, action) => {
-      const articleLink = action.payload;
-      const article = state.items.find((item) => item.link === articleLink);
+    markAsRead: (state, action) => {
+      const article = state.articles.find(
+        (article) => article.link === action.payload
+      );
       if (article) {
         article.isRead = !article.isRead;
       }
@@ -40,14 +43,18 @@ const articlesSlice = createSlice({
         state.status = "loading";
       })
       .addCase(fetchArticles.fulfilled, (state, action) => {
-        const { articles, favorites, reads } = action.payload;
         state.status = "succeeded";
-        state.items = articles.map((article) => ({
-          ...article,
-          id: nanoid(),
-          isFavorite: favorites.some((fav) => fav.link === article.link),
-          isRead: reads.some((read) => read.link === article.link),
-        }));
+        const newArticles = action.payload.map((article) => {
+          const existingArticle = state.articles.find(
+            (existing) => existing.link === article.link
+          );
+          return {
+            ...article,
+            isFavorite: existingArticle ? existingArticle.isFavorite : false,
+            isRead: existingArticle ? existingArticle.isRead : false,
+          };
+        });
+        state.articles = newArticles;
       })
       .addCase(fetchArticles.rejected, (state, action) => {
         state.status = "failed";
@@ -55,5 +62,15 @@ const articlesSlice = createSlice({
       });
   },
 });
-export const { toggleFavorite, toggleRead } = articlesSlice.actions;
+
+export const { toggleFavorite, markAsRead } = articlesSlice.actions;
+
+export const selectAllArticles = (state) => state.articles.articles;
+export const getArticlesError = (state) => state.articles.error;
+export const getArticlesStatus = (state) => state.articles.status;
+
+export const getAllFavorites = createSelector([selectAllArticles], (articles) =>
+  articles.filter((article) => article.isFavorite)
+);
+
 export default articlesSlice.reducer;
