@@ -1,12 +1,11 @@
 import PropTypes from "prop-types";
 import { format } from "date-fns";
-import { NoteText } from "iconsax-react";
 import FavoriteButton from "./FavoriteButton";
 import MarkAsReadButton from "./MarkAsReadButton.jsx";
 import { motion } from "framer-motion";
 import SelectCategoryButton from "./SelectCategoryButton.jsx";
+import AddNotesButton from "./AddNotesButton.jsx";
 
-// eslint-disable-next-line react/prop-types
 export default function Article({ article }) {
   const pubDate = new Date(article.pubDate);
   const formattedDate = format(pubDate, "dd.MM.yyyy");
@@ -45,10 +44,7 @@ export default function Article({ article }) {
           <div className="flex flex-row justify-between text-sm items-center">
             <FavoriteButton article={article} />
             <MarkAsReadButton article={article} />
-            <div className="flex flex-row gap-1 items-center">
-              <NoteText size={16} />
-              <p>Add notes</p>
-            </div>
+            <AddNotesButton article={article} />
           </div>
         </div>
       </div>

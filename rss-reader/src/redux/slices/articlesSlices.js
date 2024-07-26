@@ -36,6 +36,24 @@ const articlesSlice = createSlice({
         article.isRead = !article.isRead;
       }
     },
+    addNote: (state, action) => {
+      const { link, text } = action.payload;
+      const article = state.articles.find((article) => article.link === link);
+      if (article) {
+        article.note = text;
+      }
+    },
+    deleteNote: (state, action) => {
+      const article = state.articles.find(
+        (article) => article.link === action.payload
+      );
+
+      if (article) {
+        article.note = "";
+      } else {
+        console.log("Article not found");
+      }
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -52,6 +70,7 @@ const articlesSlice = createSlice({
             ...article,
             isFavorite: existingArticle ? existingArticle.isFavorite : false,
             isRead: existingArticle ? existingArticle.isRead : false,
+            note: existingArticle ? existingArticle.note : "",
           };
         });
         state.articles = newArticles;
@@ -63,11 +82,18 @@ const articlesSlice = createSlice({
   },
 });
 
-export const { toggleFavorite, markAsRead } = articlesSlice.actions;
+export const { toggleFavorite, markAsRead, addNote, deleteNote } =
+  articlesSlice.actions;
 
 export const selectAllArticles = (state) => state.articles.articles;
 export const getArticlesError = (state) => state.articles.error;
 export const getArticlesStatus = (state) => state.articles.status;
+
+export const getNote = (link) =>
+  createSelector([selectAllArticles], (articles) => {
+    const article = articles.find((article) => article.link === link);
+    return article ? article.note : "";
+  });
 
 export const getAllFavorites = createSelector([selectAllArticles], (articles) =>
   articles.filter((article) => article.isFavorite)
