@@ -4,7 +4,7 @@ import FavoriteButton from "./FavoriteButton";
 import MarkAsReadButton from "./MarkAsReadButton.jsx";
 import { motion } from "framer-motion";
 import SelectCategoryButton from "./SelectCategoryButton.jsx";
-import AddNotesButton from "./AddNotesButton.jsx";
+import AddNoteButton from "./AddNoteButton.jsx";
 
 export default function Article({ article }) {
   const pubDate = new Date(article.pubDate);
@@ -44,7 +44,7 @@ export default function Article({ article }) {
           <div className="flex flex-row justify-between text-sm items-center">
             <FavoriteButton article={article} />
             <MarkAsReadButton article={article} />
-            <AddNotesButton article={article} />
+            <AddNoteButton article={article} />
           </div>
         </div>
       </div>

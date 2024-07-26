@@ -2,10 +2,14 @@ import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { useDispatch } from "react-redux";
 import { addNote, deleteNote } from "../redux/slices/articlesSlices";
+import { motion } from "framer-motion";
+import TemporaryMessage from "./TemporaryMessage";
 
-export default function NotesModal({ isShow, onClose, note, articleLink }) {
+export default function NoteModal({ isShow, onClose, note, articleLink }) {
   const [isDisplay, setIsDisplay] = useState(false);
   const [text, setText] = useState(note || "");
+  const [message, setMessage] = useState(null);
+  const [messageType, setMessageType] = useState("info");
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -30,12 +34,19 @@ export default function NotesModal({ isShow, onClose, note, articleLink }) {
   };
 
   const handleSave = () => {
-    dispatch(
-      addNote({
-        link: articleLink,
-        text: text,
-      })
-    );
+    if (text.trim() === "") {
+      setMessage("Note cannot be empty!");
+      setMessageType("error");
+    } else {
+      dispatch(
+        addNote({
+          link: articleLink,
+          text: text,
+        })
+      );
+      setMessage("Note saved successfully!");
+      setMessageType("success");
+    }
   };
 
   return (
@@ -55,30 +66,41 @@ export default function NotesModal({ isShow, onClose, note, articleLink }) {
               />
             </div>
             <div className="flex gap-3 justify-center mt-4">
-              <button
+              <motion.button
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.9 }}
+                transition={{ type: "spring", stiffness: 400, damping: 10 }}
                 onClick={handleClose}
                 className="bg-red-300 px-4 py-2 rounded-md"
               >
                 Close
-              </button>
-              <button
+              </motion.button>
+              <motion.button
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.9 }}
+                transition={{ type: "spring", stiffness: 400, damping: 10 }}
                 onClick={handleSave}
                 className="bg-green-300 px-4 py-2 rounded-md"
               >
                 Save
-              </button>
+              </motion.button>
               {note !== "" && (
-                <button
+                <motion.button
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.9 }}
+                  transition={{ type: "spring", stiffness: 400, damping: 10 }}
                   onClick={() => {
                     dispatch(deleteNote(articleLink));
-                    handleClose();
+                    setMessage("Note deleted successfully!");
+                    setMessageType("error");
                   }}
                   className="bg-slate-200 px-4 py-2 rounded-md"
                 >
                   Delete
-                </button>
+                </motion.button>
               )}
             </div>
+            {message && <TemporaryMessage text={message} type={messageType} />}
           </div>
         </div>
       )}
@@ -86,7 +108,7 @@ export default function NotesModal({ isShow, onClose, note, articleLink }) {
   );
 }
 
-NotesModal.propTypes = {
+NoteModal.propTypes = {
   isShow: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
   note: PropTypes.string,

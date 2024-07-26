@@ -1,12 +1,12 @@
 import { NoteText } from "iconsax-react";
 import { motion } from "framer-motion";
 import { useState } from "react";
-import NotesModal from "./NotesModal";
+import NoteModal from "./NoteModal";
 import { useSelector } from "react-redux";
 import { getNote } from "../redux/slices/articlesSlices";
 import PropTypes from "prop-types";
 
-export default function AddNotesButton({ article }) {
+export default function AddNoteButton({ article }) {
   const [modalOpen, setModalOpen] = useState(false);
   const note = useSelector(getNote(article.link));
 
@@ -28,7 +28,7 @@ export default function AddNotesButton({ article }) {
         </div>
       </motion.div>
       <div>
-        <NotesModal
+        <NoteModal
           isShow={modalOpen}
           note={note}
           articleLink={article.link}
@@ -39,7 +39,7 @@ export default function AddNotesButton({ article }) {
   );
 }
 
-AddNotesButton.propTypes = {
+AddNoteButton.propTypes = {
   article: PropTypes.shape({
     link: PropTypes.string.isRequired,
   }).isRequired,
