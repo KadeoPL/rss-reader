@@ -39,13 +39,16 @@ export default function NavigationBar({ sendSearchText }) {
       </div>
 
       <div className="flex flex-col md:flex-row md:items-center">
-        <div className="flex gap-5 justify-center items-center mb-5 md:mb-0 md:mr-5">
+        <div className="flex flex-col gap-5 justify-center items-center mb-5 md:flex-row md:mb-0 md:mr-5">
           <div className="flex gap-2">
             <p>Sort by:</p>
             <SelectSortInput />
           </div>
+          <div className="flex gap-2">
           <DiselectCategoryButton />
           <HideReadButton />
+          </div>
+          
         </div>
         <form>
           <input
