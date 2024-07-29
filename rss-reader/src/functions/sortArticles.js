@@ -1,14 +1,20 @@
-export default function sortArticles(articles, sortBy) {
-  switch (sortBy) {
-    case "date":
-      return articles
-        .slice()
-        .sort((a, b) => new Date(b.pubDate) - new Date(a.pubDate));
-    case "title":
-      return articles.slice().sort((a, b) => a.title.localeCompare(b.title));
-    case "author":
-      return articles.slice().sort((a, b) => a.author.localeCompare(b.author));
-    default:
-      return articles;
-  }
+export default function sortArticles(articles, sortBy, sortOrder = "ascending") {
+  return articles.slice().sort((a, b) => {
+    let comparison = 0;
+    switch (sortBy) {
+      case "date":
+        comparison = new Date(a.pubDate) - new Date(b.pubDate);
+        break;
+      case "title":
+        comparison = a.title.localeCompare(b.title);
+        break;
+      case "author":
+        comparison = a.author.localeCompare(b.author);
+        break;
+      default:
+        return 0;
+    }
+
+    return sortOrder === "descending" ? -comparison : comparison;
+  });
 }

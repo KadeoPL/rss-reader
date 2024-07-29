@@ -12,7 +12,7 @@ import Article from "../components/Article";
 import { getCategoryToSort } from "../redux/slices/sortByCategory.js";
 import { useState } from "react";
 import sortArticles from "../functions/sortArticles.js";
-import { getSortBy } from "../redux/slices/sortSlices.js";
+import {getSortBy, getSortOrder} from "../redux/slices/sortSlices.js";
 
 export default function Home() {
   const articles = useSelector(selectAllArticles);
@@ -21,6 +21,7 @@ export default function Home() {
   const isHideRead = useSelector(getIsHideRead);
   const categorySort = useSelector(getCategoryToSort);
   const sortBy = useSelector(getSortBy);
+  const sortOrder = useSelector(getSortOrder);
 
   const [searchText, setSearchText] = useState("");
 
@@ -31,7 +32,7 @@ export default function Home() {
   if (status === "loading") {
     content = <div className="text-center my-5">Loading...</div>;
   } else if (status === "succeeded") {
-    const sortedArticles = sortArticles(articles, sortBy);
+    const sortedArticles = sortArticles(articles, sortBy, sortOrder);
     content = sortedArticles
       .filter((article) => !isHideRead || !article.isRead)
       .filter(
