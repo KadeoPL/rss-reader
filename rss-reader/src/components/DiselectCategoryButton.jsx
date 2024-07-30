@@ -3,13 +3,16 @@ import {
   diselectCategory,
   getCategoryToSort,
 } from "../redux/slices/sortByCategory";
+import {useSearchParams} from "react-router-dom";
 
 export default function DiselectCategoryButton() {
   const dispatch = useDispatch();
   const category = useSelector(getCategoryToSort);
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const handleClick = () => {
     dispatch(diselectCategory());
+    setSearchParams('');
   };
 
   return (
